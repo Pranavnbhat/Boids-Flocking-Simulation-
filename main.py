@@ -6,63 +6,80 @@ from pygame.math import Vector2 as vec
 
 
 class Boid(pygame.sprite.Sprite):
-    def __init__(self,x,y):
+    def __init__(self):
         super().__init__()
+        
         self.side = 15        
         self.h = math.sqrt(3)/2 * self.side        
+        
         self.image= pygame.Surface((self.side, int(self.h)), pygame.SRCALPHA) 
-        self.vec=pygame.vec(spawn_pos_x, spawn_pos_y)
+        
+        
+        self.rect = self.image.get_rect(center=(x, y))
+        
+        self.vec=vec(self.rect.x,self.rect.y)
+        self.velocity = vec(random.randint(-3,3), random.randint(-3,3))
+        
+        avg_velocity=vec(0,0)
+        
+        self.perception_radius = 50 
 
         points = [        
             (self.side/2, 0),        # top        
             (0, self.h),             # bottom left        
-            (self.side, self.h)           # bottom right        
+            (self.side, self.h)      # bottom right        
         ]        
-        pygame.draw.polygon(self.image, (255, 255, 255), points)        
-        self.rect = self.image.get_rect(center=(400, 300))
+        
+        pygame.draw.polygon(self.image, (255, 255, 255), points)    
+
+        
+        
+        
 
 
     
         
         
-    def perception_radius(self):
+    
 
                 
     
-    def seperation(self):
+    def seperation(self,Boidgroup):
         for Boid in Boidgroup:
             if Boid!= self:
                 distance=(self.vec - Boid.vec).length()
                 if distnace<perception_radius:
-                    if self.rect.centerx<Boid.rect.centerx:
-                        #move left 
-                    if self.rect.centerx>Boid.rect.centerx:  
-                        #move right 
-                    if self.rect.centery<Boid.rect.centery:
-                        #move down 
-                    if self.rect.centery>Boid.rect.centery:    
-                        #move up 
+                    diff = self.vec - boid.vec 
         
-    def alignement(self):
-
-    def cohesion(self):
+    def alignement(self,Boidgroup):
+        for Boid in Boidgroup:
+            if Boid!= self:
+                distance=(self.vec - Boid.vec).length()
+                if distnace<perception_radius:
+                    avg_velocity=avg_velocity+Boid.velocity
+                    
     
+    
+    def cohesion(self):
+        
+        
+        
+        
+        
+        
+        
+        
+    def update(self, boidgroup):
+        sep = self.separation(boidgroup)
+        ali = self.alignment(boidgroup)
+        coh = self.cohesion(boidgroup)    
+        
+        self.velocity += sep * 0.05
+        self.velocity += ali * 0.05
+        self.velocity += coh * 0.05    
 
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+ 
 pygame.init()
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption('Boids')
