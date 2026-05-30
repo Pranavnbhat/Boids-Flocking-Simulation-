@@ -17,10 +17,10 @@ class Boid(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect(center=(x, y))
         
-        self.vec=vec(self.rect.x,self.rect.y)
+        self.vec=vec(self.rect.centerx,self.rect.centery)
         self.velocity = vec(random.randint(-3,3), random.randint(-3,3))
         
-        avg_velocity=vec(0,0)
+        
         
         self.perception_radius = 50 
 
@@ -50,17 +50,39 @@ class Boid(pygame.sprite.Sprite):
                 distance=(self.vec - Boid.vec).length()
                 if distnace<perception_radius:
                     diff = self.vec - boid.vec 
+                    diff = diff.normalize() / distance
+                    steering += diff
+                    
+        return steering                
         
     def alignement(self,Boidgroup):
+        avg_velocity=vec(0,0)
+        count=0
         for Boid in Boidgroup:
             if Boid!= self:
                 distance=(self.vec - Boid.vec).length()
                 if distnace<perception_radius:
                     avg_velocity=avg_velocity+Boid.velocity
-                    
+                    count += 1
+        if count > 0:
+            avg_velocity /= count 
+        return avg_velocity    
     
     
     def cohesion(self):
+        avg_pos=vec(0,0)
+        count=0
+        for Boid in Boidgroup:
+            if Boid!= self:
+                distance=(self.vec - Boid.vec).length()
+                if distnace<perception_radius:
+                    avg_pos += Boid.vec 
+                    count += 1
+        if count >0:
+            avg_pos /= count 
+        return avg_pos
+                 
+        
         
         
         
