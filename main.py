@@ -6,7 +6,7 @@ from pygame.math import Vector2 as vec
 
 
 class Boid(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y):
         super().__init__()
         
         self.side = 15        
@@ -19,6 +19,8 @@ class Boid(pygame.sprite.Sprite):
         
         self.vec=vec(self.rect.centerx,self.rect.centery)
         self.velocity = vec(random.randint(-3,3), random.randint(-3,3))
+        
+        self.max_speed = 4
         
         
         
@@ -45,11 +47,12 @@ class Boid(pygame.sprite.Sprite):
                 
     
     def seperation(self,Boidgroup):
+        steering = vec(0, 0)
         for Boid in Boidgroup:
             if Boid!= self:
                 distance=(self.vec - Boid.vec).length()
-                if distnace<perception_radius:
-                    diff = self.vec - boid.vec 
+                if distance<self.perception_radius:
+                    diff = self.vec - Boid.vec 
                     diff = diff.normalize() / distance
                     steering += diff
                     
@@ -61,7 +64,7 @@ class Boid(pygame.sprite.Sprite):
         for Boid in Boidgroup:
             if Boid!= self:
                 distance=(self.vec - Boid.vec).length()
-                if distnace<perception_radius:
+                if distance<self.perception_radius:
                     avg_velocity=avg_velocity+Boid.velocity
                     count += 1
         if count > 0:
@@ -69,13 +72,13 @@ class Boid(pygame.sprite.Sprite):
         return avg_velocity    
     
     
-    def cohesion(self):
+    def cohesion(self,Boidgroup):
         avg_pos=vec(0,0)
         count=0
         for Boid in Boidgroup:
             if Boid!= self:
                 distance=(self.vec - Boid.vec).length()
-                if distnace<perception_radius:
+                if distance<self.perception_radius:
                     avg_pos += Boid.vec 
                     count += 1
         if count >0:
@@ -91,14 +94,18 @@ class Boid(pygame.sprite.Sprite):
         
         
         
-    def update(self, boidgroup):
-        sep = self.separation(boidgroup)
-        ali = self.alignment(boidgroup)
-        coh = self.cohesion(boidgroup)    
+    def update(self, Boidgroup):
+        sep = self.separation(Boidgroup)
+        ali = self.alignment(Boidgroup)
+        coh = self.cohesion(Boidgroup)    
         
         self.velocity += sep * 0.05
         self.velocity += ali * 0.05
-        self.velocity += coh * 0.05    
+        self.velocity += coh * 0.05
+        
+        
+       self.vec += self.velocity
+       self.rect.center = (int(self.vec.x), int(self.vec.y))
 
         
  
