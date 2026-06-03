@@ -113,6 +113,9 @@ pygame.init()
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption('Boids')
 clock = pygame.time.Clock() 
+
+buffer_timer=pygame.USEREVENT + 1
+buffer_state=False 
             
         
         
@@ -126,7 +129,17 @@ while True:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:        
             pygame.quit()        
-            exit()        
+            exit()
+        
+        if event.type ==pygame.MOUSEBUTTONDOWN and not buffer_state:
+            buffer_state=True 
+            
+            
+        if buffer_state:
+            pygame.time.set_timer(buffer_timer, x)    # change x to however long buffer should be 
+            if event.type ==buffer_timer
+            buffer_state= Fasle 
+            
             
             
     pygame.display.update()
