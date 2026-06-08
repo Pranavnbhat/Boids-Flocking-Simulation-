@@ -58,7 +58,7 @@ class Boid(pygame.sprite.Sprite):
                     
         return steering                
         
-    def alignement(self,Boidgroup):
+    def alignment (self,Boidgroup):
         avg_velocity=vec(0,0)
         count=0
         for Boid in Boidgroup:
@@ -83,7 +83,7 @@ class Boid(pygame.sprite.Sprite):
                     count += 1
         if count >0:
             avg_pos /= count 
-        return avg_pos
+        return avg_pos-self.vec
                  
         
         
@@ -95,7 +95,7 @@ class Boid(pygame.sprite.Sprite):
         
         
     def update(self, Boidgroup):
-        sep = self.separation(Boidgroup)
+        sep = self.seperation(Boidgroup)
         ali = self.alignment(Boidgroup)
         coh = self.cohesion(Boidgroup)    
         
@@ -103,11 +103,11 @@ class Boid(pygame.sprite.Sprite):
         self.velocity += ali * 0.05
         self.velocity += coh * 0.05
         
+        self.vec += self.velocity
+        self.rect.center = (int(self.vec.x), int(self.vec.y))
         
-       self.vec += self.velocity
-       self.rect.center = (int(self.vec.x), int(self.vec.y))
-
         
+     
  
 pygame.init()
 screen = pygame.display.set_mode((800,600))
@@ -116,6 +116,10 @@ clock = pygame.time.Clock()
 
 buffer_timer=pygame.USEREVENT + 1
 buffer_state=False 
+
+
+
+Boidgroup= pygame.sprite.Group()
             
         
         
@@ -132,13 +136,18 @@ while True:
             exit()
         
         if event.type ==pygame.MOUSEBUTTONDOWN and not buffer_state:
-            buffer_state=True 
+            buffer_state=True
+            mousepos = pygame.mouse.get_pos()
+            Boidgroup.add(Boid(mousepos[0], mousepos[1]))
+            Boidgroup.update(Boidgroup)
+            Boidgroup.draw(screen)
+            
             
             
         if buffer_state:
-            pygame.time.set_timer(buffer_timer, x)    # change x to however long buffer should be 
-            if event.type ==buffer_timer
-            buffer_state= Fasle 
+            pygame.time.set_timer(buffer_timer, 10)    # change x to however long buffer should be 
+            if event.type ==buffer_timer:
+                buffer_state= False 
             
             
             
