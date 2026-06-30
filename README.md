@@ -1,6 +1,8 @@
 # Boids Flocking Simulation
 A 2D simulation of Craig Reynolds' classic "boids" model, built in Python with pygame. Each boid follows three simple local rules, and flock-like motion emerges from their interaction 
+
 ## Preview 
+[Preview Video](preview.mp4)
 
 
 ## Features 
