@@ -87,13 +87,7 @@ class Boid(pygame.sprite.Sprite):
         return vec(0, 0)  # no neighbours, no force    
         
         
-    #def barrier(self):
-        #if self.rect.centerx<some value near 0:
-            #self.velocity +=some positive value 
-        #if self.rect.centerx<some value near 800: 
-            #self.velocity +=some negative value  
-
-        #similiar for y 
+ 
     
     def barrier(self):
         margin = 50
@@ -125,10 +119,12 @@ class Boid(pygame.sprite.Sprite):
         self.velocity += ali * (0.04+(0.01*x))
         self.velocity += coh * (0.04+(0.01*y))
         
-        self.barrier()
+        
         
         if self.velocity.length() > self.max_speed:
             self.velocity = self.velocity.normalize() * self.max_speed
+            
+        self.barrier()    
         
         self.vec += self.velocity
         self.rect.center = (int(self.vec.x), int(self.vec.y))
