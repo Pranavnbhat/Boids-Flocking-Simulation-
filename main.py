@@ -115,9 +115,9 @@ class Boid(pygame.sprite.Sprite):
         ali = self.alignment(Boidgroup)
         coh = self.cohesion(Boidgroup)    
         
-        self.velocity += sep * (0.04+(0.01*z))
-        self.velocity += ali * (0.04+(0.01*x))
-        self.velocity += coh * (0.04+(0.01*y))
+        self.velocity += sep * (0.04+(1*z))
+        self.velocity += ali * (0.04+(1*x))
+        self.velocity += coh * (0.04+(1*y))
         
         
         
