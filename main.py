@@ -94,6 +94,19 @@ class Boid(pygame.sprite.Sprite):
             #self.velocity +=some negative value  
 
         #similiar for y 
+    
+    def barrier(self):
+        margin = 50
+        turn_factor = 0.5
+    
+        if self.rect.centerx < margin:
+            self.velocity.x += turn_factor
+        if self.rect.centerx > 800 - margin:
+            self.velocity.x -= turn_factor
+        if self.rect.centery < margin:
+            self.velocity.y += turn_factor
+        if self.rect.centery > 600 - margin:
+            self.velocity.y -= turn_factor    
         
         
         
@@ -111,6 +124,8 @@ class Boid(pygame.sprite.Sprite):
         self.velocity += sep * (0.04+(0.01*z))
         self.velocity += ali * (0.04+(0.01*x))
         self.velocity += coh * (0.04+(0.01*y))
+        
+        self.barrier()
         
         if self.velocity.length() > self.max_speed:
             self.velocity = self.velocity.normalize() * self.max_speed
